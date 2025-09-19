@@ -16,17 +16,23 @@ var ApiState = Config{
 }
 
 func Next() string {
-	ApiState.Next = fmt.Sprintf("https://pokeapi.co/api/v2/location-area?offset=%d&limit=20", ApiState.Offset)
 	ApiState.Offset += 20
+	ApiState.Next = fmt.Sprintf(
+		"https://pokeapi.co/api/v2/location-area?offset=%d&limit=20",
+		ApiState.Offset-20,
+	)
 	return ApiState.Next
 }
 
 func Previous() string {
-	if ApiState.Offset < 40 {
+	if ApiState.Offset <= 20 {
 		fmt.Println("This is first page")
 		return ""
 	}
-	ApiState.Offset -= 40
-	ApiState.Previous = fmt.Sprintf("https://pokeapi.co/api/v2/location-area?offset=%d&limit=20", ApiState.Offset)
+	ApiState.Offset -= 20
+	ApiState.Previous = fmt.Sprintf(
+		"https://pokeapi.co/api/v2/location-area?offset=%d&limit=20",
+		ApiState.Offset-20,
+	)
 	return ApiState.Previous
 }
