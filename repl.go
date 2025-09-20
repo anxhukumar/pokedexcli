@@ -10,7 +10,7 @@ import (
 	"github.com/anxhukumar/pokedexcli/pokeapi"
 )
 
-func repl() {
+func repl(client pokeapi.Client) {
 	reader := bufio.NewScanner((os.Stdin))
 
 	for {
@@ -28,7 +28,7 @@ func repl() {
 		c, ok := command.GetCommands()[cmd]
 
 		if ok {
-			c.Callback(&pokeapi.ApiState)
+			c.Callback(&client, &pokeapi.ApiState)
 		} else {
 			fmt.Println("Unknown command")
 		}
@@ -36,14 +36,9 @@ func repl() {
 }
 
 func cleanInput(text string) []string {
-	res := []string{}
-
-	trimmedStr := strings.TrimSpace(text)
-	splitStrings := strings.Split(trimmedStr, " ")
-
-	for i := range splitStrings {
-		res = append(res, strings.ToLower(splitStrings[i]))
+	words := strings.Fields(text)
+	for i := range words {
+		words[i] = strings.ToLower(words[i])
 	}
-
-	return res
+	return words
 }

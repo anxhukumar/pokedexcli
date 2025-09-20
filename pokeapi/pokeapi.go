@@ -3,10 +3,39 @@ package pokeapi
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"time"
+
+	"github.com/anxhukumar/pokedexcli/internal/pokecache"
 )
 
-func ApiCall(url string) (LocationResponse, error) {
+type Client struct {
+	cache      pokecache.Cache
+	httpClient http.Client
+}
+
+func NewClient(timeout, cacheInterval time.Duration) Client {
+	return Client{
+		cache: pokecache.NewCache(cacheInterval),
+		httpClient: http.Client{
+			Timeout: timeout,
+		},
+	}
+}
+
+func (c *Client) ApiCall(url string) (LocationResponse, error) {
+
+	// check cache first
+	if val, ok := c.cache.Get(url); ok {
+		var location LocationResponse
+		if err := json.Unmarshal(val, &location); err != nil {
+			error := fmt.Errorf("failed to decode cache data")
+			return LocationResponse{}, error
+		}
+		return location, nil
+	}
+
 	// create a new request
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -15,7 +44,7 @@ func ApiCall(url string) (LocationResponse, error) {
 	}
 
 	// make the request
-	client := &http.Client{}
+	client := c.httpClient
 	res, err := client.Do(req)
 	if err != nil {
 		error := fmt.Errorf("failed to make get request")
@@ -25,11 +54,17 @@ func ApiCall(url string) (LocationResponse, error) {
 
 	// decoding response
 	var location LocationResponse
-	decoder := json.NewDecoder(res.Body)
-	if err := decoder.Decode(&location); err != nil {
-		error := fmt.Errorf("failed to make get request")
+	val, err := io.ReadAll(res.Body)
+	if err != nil {
+		return LocationResponse{}, err
+	}
+	if err := json.Unmarshal(val, &location); err != nil {
+		error := fmt.Errorf("failed to decode api response data")
 		return LocationResponse{}, error
 	}
+
+	//store data in cache
+	c.cache.Add(url, val)
 
 	return location, nil
 

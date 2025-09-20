@@ -6,26 +6,24 @@ import (
 	"github.com/anxhukumar/pokedexcli/pokeapi"
 )
 
-func commandMap(config *pokeapi.Config) error {
-	mapSlice, err := pokeapi.ApiCall(pokeapi.Next())
+func commandMap(client *pokeapi.Client, config *pokeapi.Config) error {
+	mapSlice, err := client.ApiCall(pokeapi.Next())
 	if err != nil {
 		return err
 	}
 	for _, v := range mapSlice.Results {
 		fmt.Println(v.Name)
-		fmt.Println(v.Url)
 	}
 	return nil
 }
 
-func commandMapB(config *pokeapi.Config) error {
-	mapSlice, err := pokeapi.ApiCall(pokeapi.Previous())
+func commandMapB(client *pokeapi.Client, config *pokeapi.Config) error {
+	mapSlice, err := client.ApiCall(pokeapi.Previous())
 	if err != nil {
 		return err
 	}
 	for _, v := range mapSlice.Results {
 		fmt.Println(v.Name)
-		fmt.Println(v.Url)
 	}
 	return nil
 }
