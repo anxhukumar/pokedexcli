@@ -6,7 +6,7 @@ import (
 	"github.com/anxhukumar/pokedexcli/pokeapi"
 )
 
-func commandHelp(client *pokeapi.Client, config *pokeapi.Config) error {
+func commandHelp(client *pokeapi.Client, config *pokeapi.Config, areaName string) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Printf("Usage:\n\n")
 	for _, cmd := range GetCommands() {

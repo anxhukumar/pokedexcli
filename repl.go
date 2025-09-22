@@ -25,10 +25,22 @@ func repl(client pokeapi.Client) {
 		cleanString := cleanInput(reader.Text())
 		cmd := cleanString[0]
 
+		areaName := ""
+
+		//set areaName for the commandExplore
+		if cmd == "explore" {
+			if len(cleanString) > 1 {
+				areaName = cleanString[1]
+			} else {
+				fmt.Println("!Missing area input: explore ?")
+				continue
+			}
+		}
+
 		c, ok := command.GetCommands()[cmd]
 
 		if ok {
-			c.Callback(&client, &pokeapi.ApiState)
+			c.Callback(&client, &pokeapi.ApiState, areaName)
 		} else {
 			fmt.Println("Unknown command")
 		}
