@@ -42,7 +42,7 @@ func repl(client pokeapi.Client) {
 			if len(cleanString) > 1 {
 				pokemon = cleanString[1]
 
-				_, ok := pokeapi.Pokemoncollection[pokemon]
+				_, ok := pokeapi.PokemonCollection[pokemon]
 
 				if ok {
 					fmt.Println(pokemon + " already in your Pokedex!")
@@ -51,6 +51,15 @@ func repl(client pokeapi.Client) {
 
 			} else {
 				fmt.Println("Missing pokemon input: catch | ?")
+				continue
+			}
+		}
+
+		if cmd == "inspect" {
+			if len(cleanString) > 1 {
+				pokemon = cleanString[1]
+			} else {
+				fmt.Println("Missing pokemon input: inspect | ?")
 				continue
 			}
 		}
