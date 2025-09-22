@@ -7,7 +7,7 @@ import (
 )
 
 func commandMap(client *pokeapi.Client, config *pokeapi.Config) error {
-	mapSlice, err := client.ApiCall(pokeapi.Next())
+	mapSlice, err := client.GetLocationAreas(pokeapi.Next())
 	if err != nil {
 		return err
 	}
@@ -18,7 +18,7 @@ func commandMap(client *pokeapi.Client, config *pokeapi.Config) error {
 }
 
 func commandMapB(client *pokeapi.Client, config *pokeapi.Config) error {
-	mapSlice, err := client.ApiCall(pokeapi.Previous())
+	mapSlice, err := client.GetLocationAreas(pokeapi.Previous())
 	if err != nil {
 		return err
 	}

@@ -24,7 +24,7 @@ func NewClient(timeout, cacheInterval time.Duration) Client {
 	}
 }
 
-func (c *Client) ApiCall(url string) (LocationResponse, error) {
+func (c *Client) GetLocationAreas(url string) (LocationResponse, error) {
 
 	// check cache first
 	if val, ok := c.cache.Get(url); ok {
