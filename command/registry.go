@@ -35,7 +35,7 @@ func GetCommands() map[string]CliCommand {
 		},
 		"explore": {
 			Name:        "explore",
-			Description: "Displays the list of all the pokemon in a particular location",
+			Description: "Displays the list of all the Pokemon in a particular location",
 			Callback:    commandExplore,
 		},
 		"catch": {
@@ -45,8 +45,13 @@ func GetCommands() map[string]CliCommand {
 		},
 		"inspect": {
 			Name:        "inspect",
-			Description: "Shows the details about a Pokemon if they have it in their pokedex",
+			Description: "Shows the details about a Pokemon if its in the Pokedex",
 			Callback:    commandInspect,
+		},
+		"pokedex": {
+			Name:        "pokedex",
+			Description: "Shows the list of Pokemon in the Pokedex",
+			Callback:    commandPokedex,
 		},
 	}
 }

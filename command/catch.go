@@ -24,6 +24,7 @@ func commandCatch(client *pokeapi.Client, config *pokeapi.Config, areaName strin
 	}
 
 	fmt.Println(pokemon + " was caught!")
+	fmt.Println("You may now inspect it with the inspect command")
 	pokeapi.PokemonCollection[pokemon] = pokemonData
 	return nil
 }
