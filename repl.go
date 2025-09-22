@@ -26,13 +26,31 @@ func repl(client pokeapi.Client) {
 		cmd := cleanString[0]
 
 		areaName := ""
+		pokemon := ""
 
 		//set areaName for the commandExplore
 		if cmd == "explore" {
 			if len(cleanString) > 1 {
 				areaName = cleanString[1]
 			} else {
-				fmt.Println("!Missing area input: explore ?")
+				fmt.Println("Missing area input: explore | ?")
+				continue
+			}
+		}
+
+		if cmd == "catch" {
+			if len(cleanString) > 1 {
+				pokemon = cleanString[1]
+
+				_, ok := pokeapi.Pokemoncollection[pokemon]
+
+				if ok {
+					fmt.Println(pokemon + " already in your Pokedex!")
+					continue
+				}
+
+			} else {
+				fmt.Println("Missing pokemon input: catch | ?")
 				continue
 			}
 		}
@@ -40,7 +58,7 @@ func repl(client pokeapi.Client) {
 		c, ok := command.GetCommands()[cmd]
 
 		if ok {
-			c.Callback(&client, &pokeapi.ApiState, areaName)
+			c.Callback(&client, &pokeapi.ApiState, areaName, pokemon)
 		} else {
 			fmt.Println("Unknown command")
 		}

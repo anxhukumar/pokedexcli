@@ -7,7 +7,7 @@ import (
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func(client *pokeapi.Client, config *pokeapi.Config, areaName string) error
+	Callback    func(client *pokeapi.Client, config *pokeapi.Config, areaName string, pokemon string) error
 }
 
 func GetCommands() map[string]CliCommand {
@@ -37,6 +37,11 @@ func GetCommands() map[string]CliCommand {
 			Name:        "explore",
 			Description: "Displays the list of all the pokemon in a particular location",
 			Callback:    commandExplore,
+		},
+		"catch": {
+			Name:        "catch",
+			Description: "Catches Pokemon and adds it to the user's Pokedex",
+			Callback:    commandCatch,
 		},
 	}
 }

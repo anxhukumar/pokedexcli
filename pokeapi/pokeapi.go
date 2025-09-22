@@ -115,3 +115,49 @@ func (c *Client) GetPokemonInArea(url string, areaName string) (LocationAreaResp
 
 	return areaRes, nil
 }
+
+func (c *Client) GetPokemonData(url string, pokemon string) (PokemonData, error) {
+
+	// check cache first
+	if val, ok := c.cache.Get(url); ok {
+		var pokeData PokemonData
+		if err := json.Unmarshal(val, &pokeData); err != nil {
+			error := fmt.Errorf("failed to decode cache data")
+			return PokemonData{}, error
+		}
+	}
+
+	url = url + pokemon
+
+	// create a new request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		error := fmt.Errorf("failed to make get request")
+		return PokemonData{}, error
+	}
+
+	// make the request
+	client := c.httpClient
+	res, err := client.Do(req)
+	if err != nil {
+		error := fmt.Errorf("failed to make get request")
+		return PokemonData{}, error
+	}
+	defer res.Body.Close()
+
+	// decoding response
+	var pokeData PokemonData
+	val, err := io.ReadAll(res.Body)
+	if err != nil {
+		return PokemonData{}, err
+	}
+	if err := json.Unmarshal(val, &pokeData); err != nil {
+		error := fmt.Errorf("failed to decode api response data")
+		return PokemonData{}, error
+	}
+
+	//store data in cache
+	c.cache.Add(url, val)
+
+	return pokeData, nil
+}

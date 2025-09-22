@@ -6,7 +6,7 @@ import (
 	"github.com/anxhukumar/pokedexcli/pokeapi"
 )
 
-func commandExplore(client *pokeapi.Client, config *pokeapi.Config, areaName string) error {
+func commandExplore(client *pokeapi.Client, config *pokeapi.Config, areaName string, pokemon string) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	locationAreaStruct, err := client.GetPokemonInArea(url, areaName)
 	if err != nil {

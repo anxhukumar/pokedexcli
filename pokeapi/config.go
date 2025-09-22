@@ -15,6 +15,8 @@ var ApiState = Config{
 	Offset: 0,
 }
 
+var Pokemoncollection = map[string]PokemonData{}
+
 func Next() string {
 	ApiState.Offset += 20
 	ApiState.Next = fmt.Sprintf(
